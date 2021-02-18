@@ -1,0 +1,1042 @@
+---
+output:
+  pdf_document:
+    number_sections: true
+citation_package: biblatex
+title: "Importing threats and fears? - Using Latent Dirichlet Allocation to disentangle threats and fears on twitter"
+author: Daniel Saggau^[Ludwig Maximilian Unversity Munich, daniel.saggau@campus.lmu.de]
+date: May 2020
+fontsize: 12pt
+bibliography: [references.bib]
+nocite: '@*'
+abstract: Michael Webb developed a method to examine the impact of technology on occupation matching patent data with job descriptions. Using natural language processing tools, Webb argues that technology challenges the existing standing of different sectors, depending on the task at hand. Moreover, the effects of software, automation and artificial intelligence (AI) deviate. Webb argues that AI will reduce 90:10 wage inequality, but will not affect the top 1%. To complement this analysis, this paper tries to disentangile how the general public perceives threats to employment. Studying 170.000 tweets during the period of the economic lockdown due to the recent COVID-19 outbreak, evidence hints towards the narrative that tweets related to China and migration are loaded with a more diverse set of sentiments relative to tweets related to technology. Moreover, geospatial difference exist between topics. Topic models and a network analysis allow for a glimpse into the general standing of the public opinion. Nevertheless, descriptive data hints towards a bifurcated narrative during the COVID-19 pandemic. 
+
+---
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+library(knitr)
+library(tidyverse)
+library(haven)
+setwd("~/automation and labour economics")
+img_migration_map <- "images/maps/map migration tweets.png"
+comp_china <-"images/comp plot china.png"
+```
+
+# Introduction
+
+Opinions about the the future of automation have become increasingly bifurcated, as much as political.
+The dichotomous nature of technological change have made this topic convoluted.
+On the one hand, technology is increasing productivity and job demand.
+On the other hand technology has shaped the nature of work, causing a reallocation of labor supply.
+Politics has seen a visible movement towards partisanship.
+The attention of policy makers has been consumed by a number of topics, failing to agree on a common narrative (@autor_importing_2016).
+Technological change has been at the center of attention in research on economic growth, as manifested in several pivotal models in economic growth such as the Solow or Ramsey model.
+While technology is evolving and spreading in an ubiquitous manner, the affect of technology is still largely ambitious as different breakthroughs have led to severely different outcomes.
+In the last decades, software and robotics have reshaped various industries.
+Low skill jobs have become redundant with the establishment of industrial robots (@webb_impact_2019).
+Irrespective, other technological breakthroughs have challenged the existing standing of jobs, demanding a higher tier of skills (@autor_importing_2016).
+One example is the emerge of software.
+This has led to a reduction in middle class jobs.
+Numerous scholars have examined this effect.
+autor_skill_2003 provided a framework to understand these outcomes.
+They compare routine and non-routine tasks, suggesting that tasks which are non-routine are less exposed to software.
+Interpersonal and analytic tasks have been challenging to replace by software according to their findings.
+Routine manual work on the other hand has been affected the most severely, with routine cognitive tasks following second.
+Due to the gender gap in the selection of jobs, women have been less effected by technological change relative to men, due their accumulation in professions in fields with stronger interpersonal components.
+@acemoglu_automation_2019 build a task model to quantify exposure to technology.
+@webb_impact_2019 builds on this framework, providing a holistic examination of different types of technology.
+Furthermore, @webb_impact_2019 complements the existing literature by looking at impact of AI and the recent leaps within these fields.
+
+Webb uses natural language processing to provide a holistic understanding of three technological leaps, namely software, robots and artificial intelligence. 
+@webb_impact_2019 provides corroborating evidence that while software and robotics have a negative impact of low skilled jobs, AI is having a negative impact on high skilled labor.
+
+Economic hardship has been part and parcel of this crisis, but attention has been drawn to the fact that this situation may stimulate further investment by large companies.
+As argued by @autor_importing_2016, during times of economic hardship partisanship and political polarization have been prevalent over the course of history.
+A study by @autor_importing_2016 suggests that there is descriptive evidence that areas in which there were disruptive economic shocks, voting behavior has changed.
+But, within public opinion there is no coherent narrative to who or what is responsible for this outcome, nor is there a consistent trajetory for future policy.
+Looking at recent events, according to the department of labor, approximately 40 million people filed for unemployment in the US  over the course of a few weeks (@noauthor_us_2020).
+The trajectory towards further automation has been amplified due to the recent pandemic.
+But, who will there be to blame and how will this alter the discurse of politics and inevitably policy making?
+This study will provide further insights on the specific sentiments in the COVID-19 lockdown.
+
+This paper will use web scrapping to obtain twitter data on convoluted topics.
+The study will examine data from 19.05.2020 up to the 27.05.2020, using an application programming interface (API) to obtain twitter data.
+Three methods are used to assess public debate, namely sentiment analysis, a topic model and a network analysis.
+For the topic model we are using a three-level hierarchical Bayesian model, namely a Latent Dirichlet Allocation with a variational expectation maximization.
+For reference, the appendix provides a sample outcome using gibbs sampling.
+For the network analysis, we use ngrams with 3 words.
+To complement these insights, the appendix contains a brief  outlook of tweets on automation and migration.
+Sentiment analysis is an analysis of feelings, with which will allow one to manifest the general tendency towards certain topics.
+Moreover, topic modeling and specifically LDA, the method used in this paper, will provide insights into the exact topics suggested in these tweets.
+These insights may be able to give more precise information on the impact of the lockdown and the rise in unemployment on highly political topics.
+This may allow us to get a glimpse into what direction politics and policy making may go.
+
+This paper is structured as follows:
+Firstly, there is brief introduction about inequality, technology and the role of politics and policy making for the future trajectory of an economy.
+Subsequently, this paper will summarize the findings and method of the paper ' The Impact of Artificial Intelligence on the labor Market' published by Michael Webb.
+Further, using twitter data, this paper will illustrate the current standing towards topics relevant for political debate using sentiment analysis.
+Thereafter, these findings will be compared with the outcome of our topic model and a brief network model with trigrams will be introduced.
+Lastly, this paper provides a conclusion, following a discussion, connecting recent economic and political research.
+
+## Literature review 
+
+The controversial release of Capital in the 21st century by Thomas Piketty (2013), provided a narrative for the dynamics of inequality.
+While numerous scholars have rejected the central hypothesis in this book, it has had a large outreach.
+This book was heavily inspired by the general laws of capitalism and historical materialism introduced by Karl Marx, providing a theory of history suggesting that our material conditions will shape our history.
+Piketty argues that capital accumulation and technology will disrupt the forces of production and economic/political life resulting in a more unequal society (@acemoglu_rise_2015).
+@acemoglu_rise_2015 argue that this theory fails to incorporate the endogenous evolution of technology, accommodating for the fact that technology and its impact are severely dependent on the accompanying institutions and politics.
+Recent research by @acemoglu_automation_2019 provide an analysis to understand the multifaceted nature of technology. 
+They emphasize the role of the displacement effect and the productivity effect.
+The displacement effect argues that workers are replaced through automation, because technology occupies their prior positions. 
+Inevitably, this suggest a disentanglement of the relationship between wages and output, with a declining share of labor. 
+The productivity effect claims that due to the reduction in production cost, economic expansion will result in accelerated demand for labor for non-automated tasks.
+@acemoglu_automation_2019 argue that the productivity effect could emerge in non-automated sectors or the sector which is undergoing automation.
+Moreover, @acemoglu_automation_2019 state that automation occurs at both the extensive margin, replacing tasks performed by workers, and the intensive margin, replacing tasks performed by machines, deepening automation.
+They argue that this would also lead to further productivity but countervail the displacement effect.
+Following this argument, the reinstatement effect, the emergence of novel tasks, take the same direction.
+Subsequently, @acemoglu_automation_2019 discuss the mismatch between technology and skills.
+Their theory claims that this mismatch is created by a lack of accommodation of new technologies in the educational system, creating a lag in productivity.
+The authors provide two further arguments:
+Firstly, there is crowding out of growth opportunities because of a unidirectional focus on specific technologies. Secondly, the authors argue that excessive automation, caused by misguided US tax incentives has led to the socially disruptive innovation, deteriorating productivity growth. 
+Following this debate, @webb_impact_2019 suggests that the impact of inequality deviates between different technologies.
+@webb_impact_2019 uses the static canonical task based model by @acemoglu_modeling_2018.
+
+@webb_impact_2019 argues that he makes three contributions to the field:
+1. A general-purpose measure of technology providing a more holistic insight relative to the prior work on specific industries and technologies 
+2. Impact automation on jobs and wages
+3. The impact of AI specifically
+
+Work which relies on interpersonal components, have been less prone to automation and displacement.
+Due to the gender imbalances in these jobs entailing larger components of interpersonal skills, men are more affected by technology caused displacement.
+Tasks which entail a larger share of routine, have been more prone to automation and displacement.
+Especially "muscle tasks", tasks which are connected to muscle work, have been exposed to robots.
+
+# Summary
+
+@webb_impact_2019 examined three distinct effects, namely the affect of software, robots and AI on employment.
+The study uses numerous data sets:
+
+* Patent data: Google Patents Public Data (IFI CLAIMS Patent Services)
+* Job description data: O*NET database of occupations and tasks (provided by the US Department of Labor)
+* Employment/Wage data: Individual level microdata form the US Census 1960-2000 and from the ACS 2000-2018 provided by IPUMS. 
+
+Further, exposure is measure to quantify whether a task can be automated by a particular technology.
+His model was based on a static task based model, originating from @acemoglu_modeling_2018.
+Emphasis was placed at defining exposure of different occupations.
+To determine how over the course of time technology has changed, NLP is used capture changes within job descriptions and patents.
+
+## Model environment 
+
+The model was introduced by @acemoglu_modeling_2018-
+For more information, see this paper.
+
+This section is a recap of the model defined by @webb_impact_2019.
+
+The economy is defined as an entity, entailing one firm.
+Good X is produced, by combining the product of different occupations $O_{i}$.
+Further here Webb introduced the assumption that elasticity of substitution is constant, manifested in the parameter $\rho$.
+While this assumption does simplify the further analysis, inference based on this assumption should be questioned as the author even admits there is evidence that this may not hold in the real world.
+Hence, let:
+
+\begin{equation}
+X=\left(\sum_{i} \alpha_{i} O_{i}^{\rho}\right)^{\frac{1}{\rho}}
+\end{equation}
+
+O is the occupation, while T are the number of tasks. 
+
+\begin{equation}
+O_{i}=\left(\sum_{i} \alpha_{j} T_{i, j}^{\rho_{t}}\right)^{\frac{1}{\rho_{t}}}
+\end{equation}
+
+j indexes the number of tasks.
+Now we can distinguish between tasks that are exposed to automation versus tasks that are not exposed to automation.
+
+\begin{equation}
+T_{i, j}=\left\{\begin{array}{ll}
+H_{i, j}+A_{i, j} R_{i, j} & \text { if automation feasible } \\
+H_{i, j} & \text { otherwise }
+\end{array}\right.
+\end{equation}
+
+Here R embodies machines while H stands for humans.
+Further the author uses text data as fundamental input for the exposure scores.
+The following section provides a comprehensive overview of how these data points were obtained.
+
+## Method: 
+
+
+Natural language processing is used to process text data.
+@webb_impact_2019 uses the patent data to determine the extent on the given occupation of the given technology.
+The method is used to extract verb-noun pairs, also called bigrams.
+Bigrams usually describe word pairs.
+One can also work with unigrams, but these methods usually involve a substantial loss of information.
+Ultimately, these pairs are used to quantify overlap between patents and jobs.
+The method used here is to determine the frequency of different pairs.
+
+Roughtly the preprocessing of the text data can be separated into three parts:
+
+1. Define restrictions and diminishing the dimensionality by tokenizing the data
+2. Filtering for stop words and common terms/words
+3. Stemming and lemmanizing the terms/words 
+
+Frequency is defined as follows:
+
+\begin{equation}
+r f_{c}^{t}=\frac{f_{c}^{t}}{\sum_{c \in C^{t}} f_{c}^{t}}
+\end{equation}
+
+Following the definition by @webb_impact_2019, let:
+ $r f_{c}^{t}$ be the aggregate verb noun - pairs relative frequency. 
+c is the specific word-pair and t is the technology.
+$f_{c}^{t}$ be the raw count.
+$C^{t}$ be the full set of aggregate word pairs.
+
+This method approximates strongly with word embeddings.
+Specifically, Webb uses a word parcing algorithm, allow one to obtain information on words within their embedded sentences.
+Another notorious method is the bag of words-method, in which words are analyzed independent of their structure involving a severe loss of information and reduction in dimensionality.
+While these bag of words are criticized frequently, they are often common practice.
+Word parcing methods promise higher accuracy.
+This method is dominant in computational linguistics but didn't establish as common practice within text data in economics.
+This method is recommendable when one has substantial prior information and limited possibilities to split the data into training and test sets for text classification and generative text models.
+After collecting the data, the words are lemmatised words using a dictionary method, namely the WordNet dictionary.
+Lemmetisation enables one to group words into a category.
+This reduces the dimensionality of the data.
+Subsequently, these word pairs are used for inference.
+Inference based on text data is also less prominent within research.
+
+### Patent data
+
+Firstly, a set of patents are selected, focusing on specific technologies.
+Webb undertakes selection based on patent titles.
+Subsequently, verb-noun pairs are extracted from the patent titles.
+The first step is using a dependency parsing algorithm.
+This algorithm provides the feature of being able to extract syntactic relationships of words within their sentences.
+As mentioned by @webb_impact_2019,
+For each verb, the direct object is attributed.
+The verbs and nouns are lemmatized.
+Stop words (e.g. has, use, have) are extracted.
+The probability of a specific verb-noun pair occurring is calculated.
+
+### Job description data 
+
+Looking at the job description data, occupations are matched with specific tasks.
+The dependency parsing algorithm is used.
+Tasks are ranked by their frequency in the given occupation to provide a weight for these tasks within occupations.
+Each pair of verb and noun is put into conceptual categories.
+For that, a hierarchy of concepts is used.
+Thereafter,the author undertook stemming.
+Probabilities are measured, generating task and occupation scores.
+Due to the size of the data set, the paper could not correct for false positives.
+
+WordNet is used to group words into hierarchies of concepts.
+This is done to maintain conceptual categories which are mutually exclusive at nature.
+Verb-noun pairs are aggregated and used to match the patent data. 
+The main regression is run using a granular aggregation level, namely WordNet level 3 (and rerun with 2 and 5 for sensitivity), to keep more information. 
+For each exposure score, the weighted average is used to produce overall scores.
+Weights are based on the O*Net database, which provide frequencies of the different jobs.
+
+
+To complement the NLP results, an empirical strategy is selected.
+
+\begin{equation}
+\text {Exposure,}_{t}=\frac{\sum_{k \in X_{i}}\left[w_{k, l} \cdot \sum_{c \in S_{k}} r f_{c}^{t}\right]}{\sum_{k \in K_{i}}\left[w_{k, l} \cdot\left\|c: c \in S_{k}\right\|\right]}
+\end{equation}
+
+define the set of task in an occupation to be $K_{i}$.
+$k \in K_{i}$ is the task within the set of tasks.
+$S_{k}$ is the set, entailing the verb-noun pairs.
+$w_{k, l}$ is the weight of each task for occupation i.
+Further specifications can be found in the original paper.
+
+## Results for the specific technology 
+
+For each specific technology, the author provides descriptive statistics and an empirical model.
+The descriptive statistics deals with the impact on occupational wage percentile, exposure by level of education, exposure by percent of female workers in occupation and exposure by age. 
+Moreover, for the empirical strategy, the dependent variable, the change in wages, is 100* change in log wage.
+Wages are cells mean weekly wage for full time , full year workers in 1980.
+The variable offshorability is a occupation level measure, inspired by the 2013 paper by Autor and Dorn 'The growth of low skilled service jobs and the polarization of the US labor market'.
+Moreover, Webb develops an exposure measure to capture the exposure to technology.
+Data for this empirical model comes form the US Census data base, starting from 1960-2000 and fr0k ACS 2000-2018.
+
+\begin{equation}
+\Delta y_{o, i, t}=\alpha_{i}+\beta \operatorname{Exp}_{o}+\gamma \mathbf{Z}_{o}+\epsilon_{o, i, t}
+\end{equation}
+
+The regression model is provided in the references.
+As the most essential parts of this paper are the effects of technology on different groups, this will be the focus of the summary. 
+
+Each section (robots, software, AI) contains information on the least and most effect occupations and their underlying theries.
+
+### Robots:
+
+Webb used an employment threshold of 150 to filter out the 5 most and least exposed professions.
+For reference, the list provided by Webb was included in the appendix.
+Here, we filter via the number of aggregate word pairs occurrences.
+Moreover, the 10 most and least exposed professions are provided for all three areas. 
+
+Table: 
+
+```{r, echo = FALSE}
+final_df_out <- read_dta("Data /Original paper data/final_df_out.dta")
+most <- final_df_out %>% 
+  select(c(index, agg_pairs, robot_score)) %>%
+  filter(agg_pairs >20)%>%
+  arrange(desc(robot_score)) %>%
+  rename(count = agg_pairs,
+         score = robot_score)
+
+kable(most[1:10,])
+```
+
+As dicussed in the paper, evidence hints towards the reduction of "muscle jobs", and a stronger affect on non-cognitive routine tasks as displayed in the table.
+
+Table: 
+
+```{r, echo =FALSE}
+least <- most %>% 
+  select(c(index, count, score)) %>%
+  arrange(score) 
+
+kable(least[1:10,])
+```
+
+Occupations with a substantial degree of interpersonal and manual components are less affected by robots.
+As seen in the table, art related and creative jobs have been amongst the least affected.
+One see a difference between genders, as women frequently occupy such positions.
+Hence, one can see that men under the age of 30 are most affected, even more so than women in the same age group having the same educational obtainment. 
+
+### Software:
+
+One can see that, as mentioned by Webb that here middle and high skilled jobs are exposed strongly.
+Moreover, one should note that these jobs might have been exposed but necessarily led to the displacement.
+These affects may manifest differently such as e.g. a reduction in wages.
+
+```{r,echo=FALSE}
+most <- final_df_out %>% 
+  select(c(index, agg_pairs, software_score)) %>%
+  filter(agg_pairs >20)%>%
+  arrange(desc(software_score)) %>%
+  rename(count = agg_pairs,
+         score = software_score)
+
+kable(most[1:10,])
+```
+
+Again, cognitive and non-routine tasks have been less exposed to software as suggested by the appearance of creative jobs in the least exposed list.
+For reference, see the table in the appendix with the selected orginal professions.
+
+```{r, echo=FALSE}
+least <- most %>% 
+  select(c(index, count, score)) %>%
+  arrange(score) 
+
+kable(least[1:10,])
+```
+
+### AI
+
+Lastly, @webb_impact_2019. examines artificial intelligence.
+Within the field of AI there are two pivotal pillars.
+General artificial intelligence deals with AI that targets universal decision making.
+The second is specific artificial intelligence.
+This is a type of AI that handles a specific problem, but would not be able to act outside of this framework.
+One field within specific AI is machine learning and it has become the flagship for artificial intelligence.
+These field have gained prominence due to fear of automation caused by these technologies.
+Supervised learning has become highly efficiently, accomplishing better performances than humans in numerous task.
+Moreover, supervised  learning, the counterpart to unsupervised learning, is a method in which a task is defined.
+Unsupervised learning deals with classification/prediction of of unknown tasks.
+Here, a task is detected through training.
+The application of machine learning is accelerating in fields that are targeting the employment of high skilled labor.
+Prominent examples are the use of machine learning for anomaly detection in medicine and the detection of financial fraud.
+@mullainathan_machine_2017 illustrate in what manner economics has adopted machine learning methods in their paper *"Machine Learning: An Applied Econometric Approach"*.
+Applications include the use of machine learning to analyse satelite data, allowing one to get insights into poverty data.
+Especially in the field of economic development this method has gained attention.
+Further, another application is the prediction of teacher quality in hiring decisions and the analysis of policy success.
+Below find the table with the most exposed professions:
+
+```{r echo=FALSE,out.width="49%", out.height="20%",fig.cap="Table 3a: Replication - Most exposed professions",fig.show='hold',fig.align='center'}
+
+most <- final_df_out %>% 
+  select(c(index, agg_pairs, ai_score)) %>%
+  filter(agg_pairs >20)%>%
+  arrange(desc(ai_score)) %>%
+  rename(count = agg_pairs,
+         score = ai_score)
+
+kable(most[1:10,])
+```
+
+High and low skilled jobs are challenged in this list.
+AI is deals with the detection of patterns, decision making and optimization.
+Hence, more advanced occupations are more keen to be effect relative to classical muscle tasks. 
+
+@webb_impact_2019 points out that people with undergraduate and graduate degrees from universities are most exposed to AI.
+Again, we filter for aggregate word pairs occurring more than 20 times.
+Hence, AI is a threat not only for medium and low skilled jobs.
+Therefore, this should alert policy makers when accounting for these factors.
+As mentioned above, this exposure may embody in a reduction in wage or a higher skill set.
+Numerous authors such as @frank_toward_2019 argue that this exposure is leading to higher entry requirements and technical skills for jobs.
+@frank_toward_2019 mention the mismatch between what college education is offering and what the future market is requiring.
+
+Overall, the relationship between technological automation and the labor market is considered non-linear.
+As one could see in the research, the results were different for different groups.
+One should note that little research was done on sectors or occupations which have benefited from further automation.
+The study solely focused on the negative repercussions from further automation, making predictions based on numerous assumptions and simplifications.
+One of the post pivotal simplifications is the fact that elasticity of substitution is assumed to be constant at various levels.
+Moreover, as mentioned in the discussion section of the paper, ownership of capital may benefit from automation.
+The largest concern expressed by the author was with respect to timing.
+The affect of technology on the labor market lags compared to the time the patent is instantiated.
+Thus, what should have been done to optimally capture the affect of technology and labor is determining a optimal time lag for the relationship.
+
+```{r echo=FALSE,out.width="49%", out.height="20%",fig.cap="Least exposed professions",fig.show='hold',fig.align='center'}
+least <- most %>% 
+  select(c(index, count, score)) %>%
+  arrange(score) 
+
+kable(least[1:10,])
+```
+
+[^2]: For Water  & Wastewater 
+[^3]: Adjudicators, and Hearing Officers 
+[^4]: Teachers for Computer Science, Architecture , Agricultural Sciences, Biological Science, Physics etc.
+
+The paper concludes that while robots and software target jobs requiring low skilled labor, artificial intelligence is tackling the jobs of high skilled workers.
+Hence, this study provides evidence that technological change will impact the work force for the majority of the work force and not only the lower skilled sectors, prone to replacement.
+One should note here that these results need to be considered with caution.
+On the one hand, the method that was used here was relatively reliable compared to other methods not using word embeddings.
+Nevertheless, other algorithms are not compared or benchmarked within this study.
+Mixed method models could provide a more comprehensive understanding of the labor market.
+Moreover, are these results mostly descriptive and not allowing for causal inference or interpretation.
+As pointed out by @autor_importing_2016, numerous effects lead to change in employment.
+Factors such as economic shocks or trade with not included in the regression model.
+Factors such as institions or political frameworks are difficult to include in a model.
+Irrespective, as pointed out by @acemoglu_rise_2015, these factors are pivotal for the future of growth.
+Especially the inequality measure within the paper does not account for the fact that the impact of AI depends on the pace at which these technological are implement and the quality of the surrounding policies.
+Hence, while it is indicative, it definitely should not be interpreted as sound prediction of the impact of AI.
+A further discussion on the implications follows in the dicussion.
+
+# Analysing threats and fears
+
+As mentioned above, our institutional framework and political realm will determine how a society accommodates changes in employment.
+As suggested by @acemoglu_rise_2015, inequality and economic trajectories are dependent on the institutions and policies they are embedded in.
+Hence, it is important to understand fears and threats within the general public.
+@autor_importing_2016 undertook a study examining how trade exposure with china has changed voting behavior.
+Their study suggests that the US has further polarized, seeing stronger movement by predominately white non-Hispanic males moving towards the political right and minority dominated districts shifting to the political left.
+As stated in their research, the polarity of ideological beliefs about the source of economic challenges and their political responses corroborate theories about in-group/out-group identification.
+Rather than disentangling these arguments to polarize at a common narrative, the political sphere is moving towards a competition of group-centric resource allocation (@autor_importing_2016)
+Further, evidence indicates that trade has potentially been one of the driving factors for changing voting behavior because of the spatial density of blue color labor that has been challenged by trade agreements with China.
+Technology on the other hand has altered the existing standing of both blue and white color labor. 
+The authors suggest that technology in combination with other forces, has also contributed to the decline of blue color labor in these concentrated demographic and geographic areas.
+While @autor_importing_2016 admit that evidence is merely indicative, they argue that economic and political polarization and therefore the rise of partisanship may be caused by disruptive economic shocks partially caused by trade with China. 
+This effect is according to their study amplified due the manifestation of these disruptive shocks in certain geo-spatial areas, accelerating "vehemence at the polls" (@autor_importing_2016).
+
+Trade, international relations, technology and migration are pivotal pillars of the narrative in the political realm and shape policies.
+This paper seeks to illustrate the recent sentiments towards work, using twitter data.
+Ultimately, the sentiments of a society will shape the path of future voting behavior and therefore the degree of partisanship within an society.
+
+The section of this paper is structured as follows:
+
+## Text data in Economics
+
+This method will provide a brief introduction into the different methods for text data usage in economics.
+
+### Document decomposition
+
+The bag of words-method is a frequently used approach to representing data (Grentzkow et al., 2019). 
+The words within a document and decoupled from structure and order, leaving one with phrases depending on the number of words specified.
+N-grams are phrases with n number of words. Social science research frequently uses unigrams, N-grams with only one word, because of the computational cost of using multiple words.
+Here one has to weight dichotomous conundrum of using more words, allowing for more precision, opposed to the additional time spend.
+As argued by Grentzkow et al. (2019), the recommended approach is to start with a unigram, and then depending on the outcome, and then to evaluate whether a more fine-grained approach is necessary. 
+
+### Methods for count and attribute analysis 
+
+Grentzkow et al. (2019), divide methods for count (ci) and attribute (vi) into four groups, namely (1) dictionary-based methods, (2) text regression methods, (3) generative language models, and (4) word embedding methods.
+Further methods exist, also entailing mixed methods of these suggested methods, providing promising results. 
+Numerous methods emerged for different purposes and with a varying degree of complexity. 
+This paper paper will use dictionary methods and generative text models.
+Figure 1 provides a brief overview, inspired by the classification used by Grentzkow et al. (2019).
+
+```{r echo=FALSE,out.width="100%",fig.align='center',fig.cap="Overview of count and attribute methods"}
+knitr::include_graphics("images/overview.png")
+```
+
+#### Dictionary Method
+
+Dictionary methods, using a lexicon, are recommended when prior knowledge is substantial, and there are reduced opportunities to appropriately separate data into training and test data.
+This method is used predominately for sentiment analysis, and has gained prominence within social sciences.
+They do not involve statistical inference, as one solely specifies the estimated value of vi as a function of ci (@gentzkow_text_2019). 
+Dictionaries e.g. “nrc”, provide predefined dimensions (“anger”, “fear”, etc.).
+Compared to other methods, this method has the tendency to provide a wide term coverage.
+Irrespective, due to the finite number of words within a lexicon and a finite number of predefined sentiments, dictionary methods are not always recommendable (@ferri_integrated_2017,).
+@gentzkow_text_2019 argue that in circumstances in which prior knowledge is substantial and there are limited possibilities to split the data intro training and test set, dictionary methods are the preferred tool of choice.
+
+Specifically, “nrc”, “afinn” and “bing” are the three lexicons used here. “nrc” allows for the highest degree of specification when it comes to sentiments. It provides insights into “fear”, “joy”, “positive”, “negative”, “trust”, “disgust”, “anger”, “anticipation”, “surprise”, and “sadness”. 
+“afinn” examines integer values ranging from 5 to -5.
+"bing" distinguishes between binary positive and negative categories (@silge_text_2017)
+
+While results are promising, @gentzkow_text_2019 argue that other methods could potentially outperform dictionary methods, providing a higher degree of accuracy.
+One of these methods is the text regression method.  
+
+#### Text regression Method
+
+The text regression method is similar to the generative language model, but both differ in their starting point. 
+Text regression methods starts by using the conditional expectation of the attribute vi.
+Here one uses the count to examine the topic.
+With generative text models, one would reverse this order, examing the problem from a causality like perspective.
+Note that notation needs to be adopted properly.
+The data is split into training and test set, and then the learner regresses the prediction of the training set onto the test set.  
+Machine learning algorithms have been one of the dominant tools within this branch of text analysis (@gentzkow_text_2019).
+Also algorithms such as random forests have been promising.
+But, when not being able to define the task unfront, other models such as generative text model allow for unsupervised machine learning in which no specific trajectory is defined.
+
+#### Generative text model 
+
+This method is currently used frequently for topic modeling.
+Latent Dirichlet Allocation (LDA) is a generative probabilistic method within the field of topic modeling for text mining (@blei_latent_2003).
+LDA is an unsupervised machine learning method, hence a method used for prediction of an un-specified pattern (@gentzkow_text_2019).
+LDA specifically is a bayesian hierarchical model. 
+Compared to hard clustering, words can embedded in a multitude of our latent factor, in this case multiple topics.
+
+```{r echo=FALSE,out.width="89%", out.height="50%",fig.cap="Graphical illustration of smoothed LDA",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/Blei.png")
+``` 
+
+The figure, which was originally provided by @blei_latent_2003 illustrates the process, providing further visual evidence why LDA is considered a hierarchical model.
+This is the smoothed version of the LDA.
+Here, alpha is a k vector.
+Theta is the proportion of the topic distribution.
+Beta is the term distribution replicate.
+z is the latent factor, namely the topic.
+w is the word.
+N is the set of topics.
+M is the document in which these objects are embedded in.
+In the regular model, k and êta are not included.
+The reason these factors are included is that in large document corpora, some words appear infrequently.
+A corpus is a collection of M documents.
+Maximum likelihood estimates would categories these words a 0 probability.
+Hence, to accommodate for that, all words are assigned a positive probability.
+
+The three-layered structure differentiates this model from other methods.
+In the first layer, the corpus level, we have alpha and beta.
+In the second layer, we examine theta, being the document level.
+In the third layer, we examine z and w, at the topic level.
+
+Cluster methods such as the Dirichlet-multinominal cluster method entail two layers namely the once sampled for the corpus and once for the word level.
+Given that in this research the package "topicmodels" is used, the model specification and mathematical derivation follows the specification given @grun_topicmodels_2011 and the original introduction of the model given by @blei_latent_2003.
+Following the elucidation by @grun_topicmodels_2011, in the first step we need to define the term distribution $\beta$.
+This indicator enables insights into the likelihood of a term occurring in a topic:
+
+\begin{equation}
+\beta \sim Dirichlet (\delta)
+\end{equation}
+
+Subsequently, we define the proportion of a topics for our data.
+Here this parameter is defined as $\theta$ and defined as suggested by @grun_topicmodels_2011 as follows:
+
+\begin{equation}
+\theta \sim Dirichlet (\alpha)
+\end{equation}
+
+Further, given that we assume conditional independence between the tokenized words, we need to specificy the distribution to be multinominal distribution for the. 
+
+\begin{equation}
+z_{i} \sim \operatorname{MN}(\theta)
+\end{equation}
+
+The package allows for LDAs with both Variation expectation maximization algorithms (VEM) and Gibbs sampling.
+
+Variation expectation maximization algorithm (VEM):
+
+The expectation maximization algorithm entails two steps.
+Firstly, the values of the variational parameters are optimized to define a posterior probability.
+Secondly, using these posterior probabilities, we look at the lower bound of the log likelihood.
+We are interested in the parameters alpha and beta.
+Specifically, we want to define the maximum likelihood estimates for each document, entailing sufficient statistics and accounting for the prior defined posterior probability.
+As illustrated by @blei_latent_2003," steps are completed until the lower bound on the log likelihood converges.
+
+\begin{equation}
+\begin{aligned}
+\ell(\alpha, \beta) &=\log (p(w | \alpha, \beta)) \\
+&=\log \int\left\{\sum_{z}\left[\prod_{i=1}^{N} p\left(w_{i} | z_{i}, \beta\right) p\left(z_{i} | \theta\right)\right]\right\} p(\theta | \alpha) d \theta
+\end{aligned}
+\end{equation}
+
+As pointed out by @gentzkow_text_2019, topic models use a variational inference.
+This variational inference, allows us to get information on the lower bound of the log likelihood, which is needed for the parameter estimation.
+This method is used to ensure proximity to a certain  parametric family, allowing for approximation of the posterior probability.
+In bayesian statistics, inference is estimated using a posterior probability, a probability accounting for and embedding prior knowledge.
+Variation inference is a tool to accommodate the complexity of challenging posterior probabilities.
+As pointed out, variation inference competes with other methods such as Markov chain Monte Carlo  sampling.
+As pointed out by @blei_variational_2017: 
+*"Variational inference tends to be faster and easier to scale to large data—it has been applied to problems such as large-scale document analysis, computational neuroscience, and computer vision.*
+*But variational inference has been studied less rigorously than Markov chain Monte Carlo  sampling, and its statistical properties are less well understood. ".*
+
+This method was introduced by @blei_latent_2003.
+One of these approaches is the Kullback-Leibler divergence.
+As a reminder:
+Alpha is a k vector.
+Theta is the proportion of the topic distribution.
+Beta is the term distribution replicate.
+z is the latent factor, namely the topic.
+w is the word.
+
+\begin{equation}
+\left(\gamma^{*}, \phi^{*}\right)=\arg \min _{(\gamma, \phi)} \mathrm{D}_{\mathrm{KL}}(q(\theta, z | \gamma, \phi) \| p(\theta, z | w, \alpha, \beta))
+\end{equation}
+
+The variation distribution is defined as follows: 
+
+\begin{equation}
+q(\theta, z | \gamma, \phi)=q_{1}(\theta | \gamma) \prod_{i=1}^{N} q_{2}\left(z_{i} | \phi_{i}\right)
+\end{equation}
+
+This results in the following specification for the variational parameter in a lower bound:
+
+\begin{equation}
+\log p(w | \alpha, \beta)=L(\gamma, \phi ; \alpha, \beta)+\mathrm{D}_{\mathrm{KL}}(q(\theta, z | \gamma, \phi) \| p(\theta, z | w, \alpha, \beta))
+\end{equation}
+
+Subsequently, we can define the lower bound $L(\gamma, \phi ; \alpha, \beta)$.
+
+\begin{equation}
+L(\gamma, \phi ; \alpha, \beta)=\mathrm{E}_{q}[\log p(\theta, z, w | \alpha, \beta)]-\mathrm{E}_{q}[\log q(\theta, z)]
+\end{equation}
+
+This allows us to minimize the difference between our subjective posterior probability and the true posterior, approximating the best possible fit for our posterior.
+Steps are repeated until the lower bound of the log-likelihood converges  @grun_topicmodels_2011.
+
+
+#### Word Embeddings 
+
+As mentioned above, this method is predominantely used in computational linguistics.
+Here, words are kept in their orignal structure.
+These word embeddings, require a higher degree of dimensionality, as we are not reducing words to their mere appearance but account for structures.
+While these methods have been prosiming as suggested in recent research, they are also computationally costly.
+Given the prior knowledge and the data these factors need to be balanced.
+
+## Data 
+
+This paper examines the sentiments of different threats to employment. 
+Specifically, this paper studies twitter data, using a data set of 170.000 twitters. 
+Following keywords are used: "migration", "china","employment" and "automation".
+For each topic, 30.000 tweets are exacted, using keywords except for china and employment for which 40.000 tweets were collected.
+Subsequently, the tweets are cleaner. Keywords, numbers, websites, special signs, symbols, selected words such as the actual word itself and white spaces are removed. 
+Stemming is used to derive the stem of the words. 
+One does not lemmatise but this method could be use to aggregate results and reduce dimensionality in future studies.
+Further, for each topic sentiments, frequency, and polarization are analyzed. 
+Additionally, Latent Dirichlet Allocation (LDA) and text classifiers for each topic are used.
+Last but not least, we provide a basic illustration of how to create a twitter bot algorithm. Future research could examine topic specific bots. 
+
+## Sentiments 
+
+This section will examine the different topics and their respective sentiments expressed on social media.
+Here, we are using a dictionary method.
+
+## Sentiments towards China
+
+China has become a salient topic within the media due to the corona outbreak.
+Trade relationships have been convoluted due to political movements in the united states.
+This section will provide insights into the different sentiments towards China.
+Three different dictionaries are compared.
+One can see that the outcome deviates substantially.
+
+```{r echo=FALSE,out.width="49%", out.height="30%",fig.cap="Sentiments towards China",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("Images/China nrc.png", "images/Contribution Complex China.png", "images/China Afinn Value.png"))
+```
+
+Looking at the "nrc"plot, the overall sentiment score is the lowest.
+This is due to the fact that the overall score compares both positive and negative feelings.
+As the "nrc" dictionary is one of the broadest, words that might fall into a simple positive or negative category as done in the "bing" method can be displayed in a nuanced manner.
+The "bing" method ranks second in overall score.
+Due to the lack of further categories, it is challenging to get further insights into in which context these words were used.
+Especially the "afinn" method map a very much stronger negative sentiment stance towards china.
+Hence, these results should be interpreted with caution.
+The "afinn" method has provided us with the a detailed glimbse into the most frequently used words, love being the only positive word.
+This method also tends towards a severely negative narrative.
+
+
+Ultimately, these results suggest that the dictionary method with unigrams is unstable.
+There is reason to believe that the extend towards certain sentiments depends heavily on the method used.
+Irrespective, all these methods also tend towards a negative narrative. 
+
+## Sentiments towards employment 
+
+This section analyses the sentiments during the lockdown with respect to employment.
+The keyword 'employment' was used.
+
+Again the three dictionary methods are compared.
+The "nrc"method suggests that positive, negative, trust and anticipation are most frequently used sentiments.
+Compared to the China results, the overall score is positive, with positive sentiments outperforming negative sentiments.
+When examining the "bing" method, one can seee that positive words outperform the number of negative words in frequency.
+The overall picture is coherent with the "nrc"method.
+The "afinn" scores are again more balanced compared to the outcome with China (@silge_text_2017)
+There seems to be a more nuanced sentiment stance towards this issue, when focusing on this method.
+
+```{r echo=FALSE,out.width="60%", out.height="30%",fig.cap="Sentiments towards employment",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("images/employment nrc.png","images/employment sentiment afinn.png" ))
+``` 
+
+Ultimately, the sentiment analysis for employment suggests a more nuanced stance.
+
+```{r echo=FALSE,out.width="60%", out.height="30%",fig.cap="Sentiments towards Employment",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/employment bing contribution.png")
+``` 
+
+To get more specific insights, one needs to examine more concise methods such as topic modelling.
+
+## Sentiments Automation 
+
+This section illustrates sentiments towards automations.
+For this section, we used 30.000 tweets in the time frame between the 19.05.2020 and the 27.05.2020.
+First we compare different dictionary based methods.
+To examine where people talk about automation, a map was creaeted with the location.
+Unfortunately, the geospaital data in the tweets was limited.
+Irrespective, the data illustrates that automation tweets accure for instance in the US more frequently in the country side and the southern states.
+The graph can be found in the appendix.
+Further looking at the sentiments towards automation, one can see sizable differences between dictionary methods.
+
+
+```{r echo=FALSE,out.width="49%", out.height="30%",fig.cap="Sentiments towards Automation",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("images/nrc automation.png", "images/automation contribution.png" ))
+``` 
+
+Due to the lack of negative terms in the "bing" chart, we provide a second chart showing contribitions most frequently made per sentiment.
+
+```{r echo=FALSE,out.width="49%", out.height="30%",fig.cap="Afinn and bing method entailing contribution per sentiment",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("images/afinn auto.png", "images/automation contribution bing.png"))
+``` 
+
+## Sentiments Migrants 
+
+This section illustrates sentiments towards migration.
+Examining where these tweets were posted, one can see that the borders were more likely to post tweets on the countries at the border.
+Moreover, same holds for other countries tweeting about migration.
+This suggests that these issues are talked about more frequently in areas where migration in a visible issue, while other geographic areas that are landlocked and far from borders don't put this issue at the center of attention.
+The graph is attached in the appendix.
+This section uses 30.000 tweets. 
+
+```{r echo=FALSE,out.width="49%", out.height="20%",fig.cap="Sentiments towards Migration",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("images/migration frequency and contribution.png","images/afinn migration.png" ))
+``` 
+
+Looking at the "afinn" chart, we can see that negative term frequencies outweight positive ones.
+This is a different results compared to the outcome given by the "nrc"chart.
+Again, one should note that these unigram method do not account for the embedded context such as "no fear" which would be look at as  "fear" and "no" separately.
+
+```{r echo=FALSE,out.width="60%", out.height="40%",fig.cap="Sentiments towards Migration",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/nrc migration.png")
+``` 
+
+
+## Topic Modelling 
+
+Compared to unigram and ngrams, topic models are mixed-membership models.
+@grun_topicmodels_2011 further elucidate that unigrams and ngrams each word is drawn from the distribution of the topic. 
+Topic models allow words to be ascosciated to multiple topics.
+Lochard Ditricht Allocation is a bayesian mixture model, applicable to data for where topics are uncorrelated (@grun_topicmodels_2011).
+Mixture models account for the exchangability of words and documents (@blei_latent_2003).
+Further @blei_latent_2003 point out that exchangibility does not imply indepedent and identically distributed but rather suggests a condional independence and indentical distribution. 
+For this research the "topicmodels" is used, using the VEM algorithm..
+First we use our corpus and summarize the rows, creating a document-term matrix with the word frequency.
+Then, all the documents with the frequency 0 are removed.
+
+Next, we define
+
+As the name suggests, this model loosens this assumption of having uncorrelated topics, and allowd for topics to be correlated as argued by @grun_topicmodels_2011.
+On a brief note, alpha should approximately be 50/k, k being the number of topics.
+We define k to be 5.
+Hence we define alpha as 10.
+
+In the subsequent section one will discuss the topic groups for the four different terms.
+
+### Employment
+
+Looking at the employment chart, we can see a debate about how to find different solutions.
+Due to the recent unemployment, there are more posts related to finding work.
+Moreover, it appears that numerous post focus on law and policy.
+Despite filtering for the words "employment" and "job", the word stem employ is depicted in the chart.
+This illustrates that the filtering method and cleaning method could have been improved.
+Especially topic 4 seems to focus on help by the state.
+Generally it appears that little discussion for this keyword is focused on blaming groups.
+Looking at the second chart focusing on China, one can see a different narrative.
+
+```{r echo=FALSE,out.width="80%", out.height="49%",fig.cap="LDA for employment",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/employment lda.png")
+``` 
+
+
+### China 
+
+```{r echo=FALSE,out.width="60%", out.height="30%",fig.cap="LDA for China",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/china lda.png" )
+``` 
+
+Numerous topics center around Hong Kong, either depicted as "hong" or "kong" or both appearing as seen in topic 1,2,3 and 4.
+Further, numerous tweets are related to president Donald Trump as seen in topic 2,4 and 5.
+Also the term people appears numerous times.
+But given that we dont know exactly in what context to which other terms, we would need insights into bigrams and trigrams to see in what context people was used. 
+It could have been peoples republic of china, people of Hong Hong/Taiwan or people in context to America.
+Employment and China dont seem to be the focus of the 5 topics in this chart.
+To get more information on automation, lets look at the LDA for this term.
+
+
+### Automation
+
+Looking at automation, one can see that the center of attention is on how to use technology and automation to improve the future of work.
+None of the topics appear to entail hateful sentiments.
+Verbs such as use,can and learn appear frequently.
+
+```{r echo=FALSE,out.width="80%", out.height="50%",fig.cap="LDA for automation",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/automation lda.png")
+``` 
+
+Generally speaking, these results hint towards a future oriented outlook rather than a narrative of fear and threat.
+In light of the excess automation argument given by acemoglu_automation_2019, this may be something of interest to study in the long run.
+Especially given the recent debate about the future of work and an amplification of automation due to the crisis and the exposed vulnerability of human workers.
+This outcome corroborates the argument given by Acemoglu and Autor that there are overly positive sentiments towards technology relative to other threats.
+Lastly, lets examine another frequently discussed issue.
+
+### Migration 
+
+While evidence is mixed, some topics suggest that the advantange of migrants is considered.
+Illegal immgrant appreard both in topic 1 and topic 5.
+
+```{r echo=FALSE,out.width="80%", out.height="50%",fig.cap="LDA for migration",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/lda migration poli8sh.png")
+``` 
+
+For reference, the gibbs method outcome for one sample is included in the appendix.
+
+## Networks
+
+To further visualize common topic debates in twitter data, we use a network graph.
+Network graphs are used by creating ngrams, examinig words that frequently appear together.
+Both bi- and trigrams were used.
+Only the trigrams are reported as their performance was superior.
+The model was built as follows:
+Using the clean corpus which was already filtered for stopwords, punctuation, websites, usernames, emojis and other symbols, and filtering for specific terms related to the search term, we build a tidytext document.
+Then, using this data set, we tokenize the words.
+For the trigrams we use ngrams with n being equal to 3.
+Words that appear less than 20 times were removed.
+
+### Network: Automation 
+
+This visualization suggests that there are 8 to 9 major topics.
+Not all of them are related to automation directly, as suggested by the one node with twitter billionare jack dorsey.
+
+
+```{r echo=FALSE,out.width="80%", out.height="50%",fig.cap="Trigram-network for automation ",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c( "images/fancy trigram auto.png"))
+``` 
+
+Numerous tweets wer focusing on machine learning and artificial intelligence.
+The benefit of this method is that we can see relationships without defining a set number of topics.
+Numerous of these nodes focus on how to utilize automation during the crisis.
+Moreover, we will look at the network for migration.
+
+## Network: Migration 
+
+Again we can see that some nodes managed to surpass the filtering process.
+Migration and labor are terms that appeared at the center of the chart.
+Compared to the network of automation, one can see a stronger proximity to one tree.
+Few topics fall out of the realm of this tree such as the node with climate change.
+
+```{r echo=FALSE,out.width="80%", out.height="50%",fig.cap="Trigram-network for migration",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c( "images/migration trigram.png"))
+``` 
+
+One should point out that here numerous nodes focus on other countries and areas. 
+The EU is mentioned twice and the ukand germany also are centrally located.
+It appears this dicusssion is broader spread. 
+To look at the narrative within the US, one would need to filter for location which was not done here as that was not the intend.
+One should note that this is difficult irrespective due to the lack of geographical data entailed in the tweets.
+Numerous observations entail missing values for this coloumn.
+
+Next, we can look at time trends.
+
+
+## Time series Plot
+
+This section introduces an example of how to model changes in twitter frequency over time.
+Prior research has used this type of plot to visualize historical events. 
+Further research has could use these methods to measure polarity-changes over time.
+This study could be extended to study for a longer period of time to study the impact of the economic lockdown in the long run.
+
+```{r echo=FALSE,out.width="60%", out.height="40%",fig.cap="Time series for automation",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/hourly tweet automation.png" )
+``` 
+
+The second time series model shows how frequency of treets on migration changed.
+One can see that there is spike between the 21st and 22nd of may.
+At this period of time the US decided to extend their border policy.
+This illustration shows that looking at twitter data, one can examine different historic events.
+
+```{r echo=FALSE,out.width="60%", out.height="40%",fig.cap="Time series for migration",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/corona extension border.png" )
+``` 
+
+Furthermore, future research could look at changes in polarity over time.
+Looking at the 
+
+It may make sense to look at the specific topics.
+Some sentiments could be taken out of context.
+
+# Conclusion
+
+The assumption that technological change will continue in a linear manner is unlikely.
+Technological change is volatile as are the repercussions of technology.
+The assumptions made by  @webb_impact_2019 are insightful for future research.
+Irrespective, next to the concerns expressed above @webb_impact_2019  also imposes some limitations that need to accounted for.
+The study was unable to embed wage decline, unemployment or movements.
+Moreover, other factors such as political factors were excluded from the narrative.
+Ultimately, the descriptive model is interesting, but future research needs to complement these insights with mix methods tools to get insights into the exact nature of these trends.
+Irrespective, evidence suggest that the displacement effect and productive effect do interplay reshaping the landscape of the labor market.
+Future research on how to accommodate these displaced workers is pivotal.
+Especially given the increasing burden to pursue further education, policy makers need to provide guidance for both high, medium and low skilled workers (frank_toward_2019).
+Increasingly flexibility and technological change are part and parcel of our workforce and intend to stay.
+Automation, artificial intelligence and the implementation of further software are inevitable predicaments of the labor market.
+More research needs to focus on disentangling the relationship between technology and the rate of substitution of work.
+While this relationship may appear linear on first sight, it clearly is bifurcated.
+As mentioned by @webb_impact_2019, different technologies have a different impact on various groups.
+Technological evolution and automation do not see class or color.
+While AI may cause reduction in cost, demand potentially could also increase, creating higher labor demand.
+This trend has not been studied sufficiently.
+
+To complement these findings, this study attempted to disentangle fears and threats on social media.
+Data on common political topics was collected to get insights into how political views might have shaped and what the current center of attention is.
+Surprisingly, findings hint to a mixed perception of the recent unemployment wave.
+There were numerous indicators that the stance also entailed hope rather than hate and blame. 
+Further, automation did not manifest as a threat.
+This research suggests that results can substantially deviate between topics.
+Irrespective, the dictionary methods provide corroborating evidence that text analysis allows one to obtain a glimpse into social media trends. 
+One should note that the results should be interpreted with caution.
+Future mixed methods models, text classification regressions, generative models and word embeddings illustrate sizable potential within the literature.
+These methods need to find further application in social sciences, to allow for more concise evidential support.
+
+Jobs entailing a larger share of interpersonal and cognitive components are less prone to displacement due to technological innovation.
+Workers within low skilled jobs are most likely to be exposed by robots.
+Workers within middle income jobs are most likely to be exposed by software.
+AI has an impact of jobs of the highly skilled.
+Machine learning is designed to solve complex decision making, predicitive modeling and other advanced challenges.
+Machine learning is an indication that most sectors of our economy will be exposed to technological change.
+Policy makers need to accomodate this universal impact.
+Further, the sentiment analysis allows us to get more insights into the feelings towards work, AI and immigrants.
+One should note that these results are merely desciptive and dont ensure causality.
+
+# Discussion 
+
+How we think about the future of work and what we think about threats to employment will shape the future political and inevitably, economic landscape.
+This paper examined threats to the labor market among the general public using twitter data.
+Examining common fears to employment, sentiments were strongest amongst tweets related to migration and China. 
+Why does this matter?
+As mentioned by @autor_importing_2016, economic hardship has reshaped voting behaviour, hinting towards further partisanship. 
+What we fear and what we perceive as a threat, shapes the narrative of politics and policy making.
+In the rising age of political opportunism and political entrepreneurship, it is important that the voting population focuses on actual threats and fears rather than polarizing towards different narratives and following a resource allocation war between different groups.
+As pointed out, numerous scholars have advocated for an endogenous evolution of technology.
+Technological evolution is also a predicament inevitable to the future of work.
+Hence, a critical stance towards the future of work is needed for a sustainable economic growth trajectory.
+Therefore, our political and institutional corridor needs to accommodate a sustainable automation pace.
+When looking at the social media data, excess automation does not manifest as a threat to employment.
+While at this point it is not surprising that the economic lockdown and news on China manifest in the center of attention, future research needs to look into how technology is perceived in the long run.
+A healthy relationship to automation and technology is pivotal to a growth sustaining society.
+Rather than polarization attention to political topics such as foreign policy or migration, real threats needs to be disentangled and communicated. 
+To sustain sustainable technological and ultimately economic growth, academia needs to communicate their ideas allowing them to unfold within political debate and manifest in voting behavior.
+As pointed out by @autor_importing_2016, descriptive evidence hints towards the fact that trade with china has led to an increased polarization in states which have suffered economic hardship.
+Future research needs to disentangle correlation and causation when it comes to technology and unemployment.
+This study did not intend to provide causal analysis, but merely provided descriptive evidence towards what sentiments people have and what people are communicating via twitter.
+Further, long-run changes towards certain topics need to be examined to further improve communication and understand common fears and threats.
+Given the rise in relevance of social media more research needs to be done on the usage of bots to spread ideological predicaments.
+
+# Appendix
+
+## Tables:
+
+Table: **Occupations with highest and lowest exposure to robots**
+
+| Least Exposed                     | Most Exposed                                 |
+| --------------------------------- | -------------------------------------------- |
+| Payroll clerks                    | Forklift drivers                             |
+| Clergy                            | Operating engineers of cranes, derricks, etc.|
+| Art/entertainment performers      | Elevator installers and repairers            |
+| Correspondence and order clerks   | Janitors                                     |
+| Eligibility clerks[^1]            | Locomotive operators: engineers and firemen  |
+
+
+[^1]: Refined to eligibility clerks for government programs
+
+ Table: Occupations with highest and lowest exposure to Software
+
+| Least Exposed                     | Most Exposed                                 |
+| --------------------------------- | -------------------------------------------- |
+| Barbers                           | Broadcast equipment operators                |
+| Podiatrists                       | Water and sewage treatment plant operators   |
+| Subject instructors, college      | Parking lot attendants                       |
+| Art/entertainment performers      | Packers and packagers by hand                |
+| Mail carriers for postal service  | Locomotive operators: engineers and firemen  |
+
+
+Table: Occupations with highest and lowest exposure to artificial Intelligence
+
+| Most Exposed                      | Least Exposed                                |
+| --------------------------------- | -------------------------------------------- |
+| Clinical laboratory technicians   | Animal caretaker, except farm                |
+| Chemical engineers                | Food preparatiion workers                    |
+| Optometrisits                     | Mail carriers for postal service             |
+| Power plant operators             | Subject instructors, college                 |
+| Dispatcher                        | Art/entertainment performers                 |
+
+
+Table: **Regression table summary of exposure on wages (1;3) and employment (2;4)**
+
+```{r echo=FALSE,out.width="80%", out.height="50%",fig.cap="Regression replication table",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("images/regression table summary .png" ))
+``` 
+
+
+## Topic Modelling 
+
+```{r echo=FALSE,out.width="80%",out.height="50%",fig.cap="Topic modelling using gibbs sampling for migration",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("images/gibbs migration.png" ))
+``` 
+
+### Network - China 
+
+The network tri-grams illustrate multivariate topics, relating to china in public debate.
+Here, due to the inability due to shortcomings in the cleansing process, symbols that should not be in the data, remained present.
+These may be chinese symbols that didnt filter out.
+Irrespective the trigram is presented here for reference.
+
+```{r echo=FALSE,out.width="80%", out.height="50%",fig.cap="Networks for China",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("images/network china.png" ))
+``` 
+
+Some of these topics are the separation movement in Hong Kong and Taiwan.
+Further, "indian" and "armi" hint towards the border conflict in Ladakh.
+
+### Networks: Employment
+
+```{r echo=FALSE,out.width="80%", out.height="50%",fig.cap="Networks for Employment",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("images/employment trigram.png" ))
+``` 
+
+
+### Mapping tweets
+
+This section provides a map of the location of the twitter useres tweeting content related to the keyword migration:
+```{r echo=FALSE,out.width="60%",out.height="30%",fig.cap="Location of tweets for Migration",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/maps/map migration tweets.png")
+```
+
+As we have not specified tweets to be solely from america, but did use english tweets, we can see in what other countries this topic has gained prominence on twitter.
+
+```{r echo=FALSE,out.width="60%",out.height="30%",fig.cap="Location of tweets for Automation",fig.show='hold',fig.align='center'}
+knitr::include_graphics("images/automation map.png")
+```
+
+One can see that a considerable amount of tweets are coming from the UK and Africa. 
+On the other hand, one can see that tweets about automation are centered differently compared to migration.
+One can see that most of the tweets orginate from the US.
+Irrespective some outliers do stick out. One can see that there are a sizable number of tweets from india.
+The employment chart corroborates the findings suggested by the LDA.
+
+# References

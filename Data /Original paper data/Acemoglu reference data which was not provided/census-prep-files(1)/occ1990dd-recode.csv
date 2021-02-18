@@ -1,0 +1,331 @@
+occ1990dd,occ1990dd_desc,Recode,Recode_desc
+4,"Chief executives and public administrators, legislators",11,Managers
+7,Financial managers,11,Managers
+8,Human resources and labor relations managers,11,Managers
+13,"Managers and specialists in marketing, advertising, and public relations",11,Managers
+14,Managers in education and related fields,11,Managers
+15,Managers of medicine and health occupations,11,Managers
+18,Managers of properties and real estate,11,Managers
+19,Funeral directors,11,Managers
+22,"Managers and administrators, n.e.c.",11,Managers
+23,Accountants and auditors,11,Managers
+24,Insurance underwriters,11,Managers
+25,Other financial specialists,11,Managers
+26,Management analysts,11,Managers
+27,"Personnel, HR, training, and labor relations specialists",11,Managers
+28,"Purchasing agents and buyers, of farm products",11,Managers
+29,"Buyers, wholesale and retail trade",11,Managers
+33,"Purchasing managers, agents and buyers, n.e.c.",11,Managers
+34,Business and promotion agents,11,Managers
+35,Construction inspectors,11,Managers
+36,"Inspectors and compliance officers, outside construction",11,Managers
+37,Management support occupations,11,Managers
+43,Architects,12,Professionals
+44,Aerospace engineer,12,Professionals
+45,"Metallurgical and materials engineers, variously phrased",12,Professionals
+47,"Petroleum, mining, and geological engineers",12,Professionals
+48,Chemical engineers,12,Professionals
+53,Civil engineers,12,Professionals
+55,Electrical engineer,12,Professionals
+56,Industrial engineers,12,Professionals
+57,Mechanical engineers,12,Professionals
+59,Not-elsewhere-classified engineers,12,Professionals
+64,Computer systems analysts and computer scientists,12,Professionals
+65,Operations and systems researchers and analysts,12,Professionals
+66,Actuaries,12,Professionals
+68,Mathematicians and statisticians,12,Professionals
+69,Physicists and astronomers,12,Professionals
+73,Chemists,12,Professionals
+74,Atmospheric and space scientists,12,Professionals
+75,Geologists,12,Professionals
+76,"Physical scientists, n.e.c.",12,Professionals
+77,Agricultural and food scientists,12,Professionals
+78,Biological scientists,12,Professionals
+79,Foresters and conservation scientists,12,Professionals
+83,Medical scientists,12,Professionals
+84,Physicians,12,Professionals
+85,Dentists,12,Professionals
+86,Veterinarians,12,Professionals
+87,Optometrists,12,Professionals
+88,Podiatrists,12,Professionals
+89,Other health and therapy,12,Professionals
+95,Registered nurses,12,Professionals
+96,Pharmacists,12,Professionals
+97,Dietitians and nutritionists,12,Professionals
+98,Respiratory therapists,12,Professionals
+99,Occupational therapists,12,Professionals
+103,Physical therapists,12,Professionals
+104,Speech therapists,12,Professionals
+105,"Therapists, n.e.c.",12,Professionals
+106,Physicians' assistants,12,Professionals
+154,Subject instructors (college),12,Professionals
+155,Kindergarten and earlier school teachers,12,Professionals
+156,Primary school teachers,12,Professionals
+157,Secondary school teachers,12,Professionals
+158,Special education teachers,12,Professionals
+159,"Teachers , n.e.c.",12,Professionals
+163,Vocational and educational counselors,12,Professionals
+164,Librarians,12,Professionals
+165,Archivists and curators,12,Professionals
+166,"Economists, market researchers, and survey researchers",12,Professionals
+167,Psychologists,12,Professionals
+169,"Social scientists, n.e.c.",12,Professionals
+173,Urban and regional planners,12,Professionals
+174,Social workers,12,Professionals
+176,Clergy and religious workers,12,Professionals
+177,Welfare service workers,12,Professionals
+178,Lawyers and judges,12,Professionals
+183,Writers and authors,12,Professionals
+184,Technical writers,12,Professionals
+185,Designers,12,Professionals
+186,Musician or composer,12,Professionals
+187,"Actors, directors, producers",12,Professionals
+188,"Art makers: painters, sculptors, craft-artists, and print-makers",12,Professionals
+189,Photographers,12,Professionals
+193,Dancers,12,Professionals
+194,Art/entertainment performers and related,12,Professionals
+195,Editors and reporters,12,Professionals
+198,Announcers,12,Professionals
+199,"Athletes, sports instructors, and officials",12,Professionals
+203,Clinical laboratory technologies and technicians,13,Technicians
+204,Dental hygenists,13,Technicians
+205,Health record tech specialists,13,Technicians
+206,Radiologic tech specialists,13,Technicians
+207,Licensed practical nurses,13,Technicians
+208,"Health technologists and technicians, n.e.c.",13,Technicians
+214,"Engineering technicians, n.e.c.",13,Technicians
+217,Drafters,13,Technicians
+218,"Surveyors, cartographers, mapping scientists and technicians",13,Technicians
+223,Biological technicians,13,Technicians
+224,Chemical technicians,13,Technicians
+225,Other science technicians,13,Technicians
+226,Airplane pilots and navigators,13,Technicians
+227,Air traffic controllers,13,Technicians
+228,Broadcast equipment operators,13,Technicians
+229,Computer software developers,13,Technicians
+233,Programmers of numerically controlled machine tools,13,Technicians
+234,"Legal assistants, paralegals, legal support, etc",13,Technicians
+235,"Technicians, n.e.c.",13,Technicians
+243,Supervisors and proprietors of sales jobs,21,Sales
+253,Insurance sales occupations,21,Sales
+254,Real estate sales occupations,21,Sales
+255,Financial services sales occupations,21,Sales
+256,Advertising and related sales jobs,21,Sales
+258,Sales engineers,21,Sales
+274,"Salespersons, n.e.c.",21,Sales
+275,Retail sales clerks,21,Sales
+276,Cashiers,21,Sales
+277,"Door-to-door sales, street sales, and news vendors",21,Sales
+283,Sales demonstrators / promoters / models,21,Sales
+303,Office supervisors,11,Managers
+308,Computer and peripheral equipment operators,22,Office and admin
+313,Secretaries and stenographers,22,Office and admin
+315,Typists,22,Office and admin
+316,"Interviewers, enumerators, and surveyors",22,Office and admin
+317,Hotel clerks,22,Office and admin
+318,Transportation ticket and reservation agents,22,Office and admin
+319,Receptionists and information clerks,22,Office and admin
+326,Correspondence and order clerks,22,Office and admin
+328,"Human resources clerks, except payroll and timekeeping",22,Office and admin
+329,Library assistants,22,Office and admin
+335,File clerks,22,Office and admin
+336,Records clerks,22,Office and admin
+337,Bookkeepers and accounting and auditing clerks,22,Office and admin
+338,Payroll and timekeeping clerks,22,Office and admin
+344,Billing clerks and related financial records processing,22,Office and admin
+346,Mail and paper handlers,22,Office and admin
+347,"Office machine operators, n.e.c.",22,Office and admin
+348,Telephone operators,22,Office and admin
+349,Other telecom operators,22,Office and admin
+354,"Postal clerks, excluding mail carriers",22,Office and admin
+355,Mail carriers for postal service,22,Office and admin
+356,"Mail clerks, outside of post office",22,Office and admin
+357,Messengers,22,Office and admin
+359,Dispatchers,22,Office and admin
+364,Shipping and receiving clerks,22,Office and admin
+365,Stock and inventory clerks,22,Office and admin
+366,Meter readers,22,Office and admin
+368,"Weighers, measurers, and checkers",22,Office and admin
+373,"Material recording, scheduling, production, planning, and expediting clerks",22,Office and admin
+375,"Insurance adjusters, examiners, and investigators",22,Office and admin
+376,"Customer service reps, investigators and adjusters, except insurance",22,Office and admin
+377,Eligibility clerks for government programs; social welfare,22,Office and admin
+378,Bill and account collectors,22,Office and admin
+379,General office clerks,22,Office and admin
+383,Bank tellers,22,Office and admin
+384,Proofreaders,22,Office and admin
+385,Data entry keyers,22,Office and admin
+386,Statistical clerks,22,Office and admin
+387,Teacher's aides,22,Office and admin
+389,"Administrative support jobs, n.e.c.",22,Office and admin
+405,"Housekeepers, maids, butlers, stewards, and lodging quarters cleaners",34,Personal care and personal services
+408,Laundry and dry cleaning workers,34,Personal care and personal services
+415,Supervisors of guards,32,Protective service
+417,"Fire fighting, prevention, and inspection",32,Protective service
+418,"Police, detectives, and private investigators",32,Protective service
+423,"Other law enforcement: sheriffs, bailiffs, correctional institution officers",32,Protective service
+425,Crossing guards and bridge tenders,32,Protective service
+426,"Guards, watchmen, doorkeepers",32,Protective service
+427,"Protective services, n.e.c.",32,Protective service
+433,Supervisors of food prep and service,33,"Food prep, buildings and grounds, cleaning"
+434,Bartenders,33,"Food prep, buildings and grounds, cleaning"
+435,Waiter/waitress,33,"Food prep, buildings and grounds, cleaning"
+436,"Cooks, variously defined",33,"Food prep, buildings and grounds, cleaning"
+439,Kitchen workers,33,"Food prep, buildings and grounds, cleaning"
+444,Misc food prep workers,33,"Food prep, buildings and grounds, cleaning"
+445,Dental assistants,34,Personal care and personal services
+447,Health and nursing aides,34,Personal care and personal services
+448,Supervisors of cleaning and building service,33,"Food prep, buildings and grounds, cleaning"
+450,"Supervisors of landscaping, lawn service and groundskeeping",33,"Food prep, buildings and grounds, cleaning"
+451,Gardeners and groundskeepers,33,"Food prep, buildings and grounds, cleaning"
+453,Janitors,33,"Food prep, buildings and grounds, cleaning"
+455,Pest control occupations,33,"Food prep, buildings and grounds, cleaning"
+457,Barbers,34,Personal care and personal services
+458,Hairdressers and cosmetologists,34,Personal care and personal services
+459,Recreation facility attendants,34,Personal care and personal services
+461,Guides,34,Personal care and personal services
+462,Ushers,34,Personal care and personal services
+464,Baggage porters,34,Personal care and personal services
+466,Recreation and fitness workers,34,Personal care and personal services
+467,Motion picture projectionists,34,Personal care and personal services
+468,Child care workers,34,Personal care and personal services
+469,"Personal service occupations, nec",34,Personal care and personal services
+470,"Supervisors of personal service jobs, n.e.c.",34,Personal care and personal services
+471,Public transportation attendants and inspectors,34,Personal care and personal services
+472,"Animal caretakers, except farm",40,Agriculture
+473,Farmers (owners and tenants),40,Agriculture
+475,Farm managers,40,Agriculture
+479,Farm workers,40,Agriculture
+488,Graders and sorters of agricultural products,40,Agriculture
+489,Inspectors of agricultural products,40,Agriculture
+496,"Timber, logging, and forestry workers",40,Agriculture
+498,"Fishers, marine life cultivators hunters, and kindred",40,Agriculture
+503,Supervisors of mechanics and repairers,23,"Production, craft and repair"
+505,Automobile mechanics,23,"Production, craft and repair"
+507,"Bus, truck, and stationary engine mechanics",23,"Production, craft and repair"
+508,Aircraft mechanics,23,"Production, craft and repair"
+509,Small engine repairers,23,"Production, craft and repair"
+514,Auto body repairers,23,"Production, craft and repair"
+516,Heavy equipment and farm equipment mechanics,23,"Production, craft and repair"
+518,Industrial machinery repairers,23,"Production, craft and repair"
+519,Machinery maintenance occupations,23,"Production, craft and repair"
+523,Repairers of industrial electrical equipment,23,"Production, craft and repair"
+525,Repairers of data processing equipment,23,"Production, craft and repair"
+526,Repairers of household appliances and power tools,23,"Production, craft and repair"
+527,Telecom and line installers and repairers,23,"Production, craft and repair"
+533,"Repairers of electrical equipment, n.e.c.",23,"Production, craft and repair"
+534,"Heating, air conditioning, and refigeration mechanics",23,"Production, craft and repair"
+535,"Precision makers, repairers, and smiths",23,"Production, craft and repair"
+536,Locksmiths and safe repairers,23,"Production, craft and repair"
+539,Repairers of mechanical controls and valves,23,"Production, craft and repair"
+543,Elevator installers and repairers,23,"Production, craft and repair"
+544,Millwrights,23,"Production, craft and repair"
+549,"Mechanics and repairers, n.e.c.",23,"Production, craft and repair"
+558,Supervisors of construction work,23,"Production, craft and repair"
+563,"Masons, tilers, and carpet installers",23,"Production, craft and repair"
+567,Carpenters,23,"Production, craft and repair"
+573,Drywall installers,23,"Production, craft and repair"
+575,Electricians,23,"Production, craft and repair"
+577,Electric power installers and repairers,23,"Production, craft and repair"
+579,"Painters, construction and maintenance",23,"Production, craft and repair"
+583,Paperhangers,23,"Production, craft and repair"
+584,Plasterers,23,"Production, craft and repair"
+585,"Plumbers, pipe fitters, and steamfitters",23,"Production, craft and repair"
+588,Concrete and cement workers,23,"Production, craft and repair"
+589,Glaziers,23,"Production, craft and repair"
+593,Insulation workers,23,"Production, craft and repair"
+594,"Paving, surfacing, and tamping equipment operators",23,"Production, craft and repair"
+595,Roofers and slaters,23,"Production, craft and repair"
+597,Structural metal workers,23,"Production, craft and repair"
+598,Drillers of earth,23,"Production, craft and repair"
+599,"Construction trades, n.e.c.",23,"Production, craft and repair"
+614,Drillers of oil wells,23,"Production, craft and repair"
+615,Explosives workers,23,"Production, craft and repair"
+616,Miners,23,"Production, craft and repair"
+617,Other mining occupations,23,"Production, craft and repair"
+628,Production supervisors or foremen,23,"Production, craft and repair"
+634,Tool and die makers and die setters,23,"Production, craft and repair"
+637,Machinists,23,"Production, craft and repair"
+643,Boilermakers,23,"Production, craft and repair"
+644,Precision grinders and filers,23,"Production, craft and repair"
+645,Patternmakers and model makers,23,"Production, craft and repair"
+649,Engravers,23,"Production, craft and repair"
+653,Other precision and craft workers,23,"Production, craft and repair"
+657,Cabinetmakers and bench carpenters,23,"Production, craft and repair"
+658,"Furniture and wood finishers, other precision woodworkers",23,"Production, craft and repair"
+666,"Dressmakers and seamstresses, tailors",23,"Production, craft and repair"
+668,Upholsterers,23,"Production, craft and repair"
+669,Shoe repairers and other precision apparel and fabric workers,23,"Production, craft and repair"
+675,"Hand molders and shapers, except jewelers",23,"Production, craft and repair"
+677,Optical goods workers,23,"Production, craft and repair"
+678,Dental laboratory and medical appliance technicians,23,"Production, craft and repair"
+679,Bookbinders,23,"Production, craft and repair"
+684,Other precision and craft workers,23,"Production, craft and repair"
+686,Butchers and meat cutters,23,"Production, craft and repair"
+687,Bakers,23,"Production, craft and repair"
+688,Batch food makers,23,"Production, craft and repair"
+694,Water and sewage treatment plant operators,23,"Production, craft and repair"
+695,Power plant operators,23,"Production, craft and repair"
+696,"Plant and system operators, stationary engineers",23,"Production, craft and repair"
+699,Other plant and system operators,23,"Production, craft and repair"
+703,"Lathe, milling, and turning machine operatives",31,"Operators, fabricators and laborers"
+706,Punching and stamping press operatives,31,"Operators, fabricators and laborers"
+707,"Rollers, roll hands, and finishers of metal",31,"Operators, fabricators and laborers"
+708,Drilling and boring machine operators,31,"Operators, fabricators and laborers"
+709,"Grinding, abrading, buffing, and polishing workers",31,"Operators, fabricators and laborers"
+713,Forge and hammer operators,31,"Operators, fabricators and laborers"
+719,"Molders, and casting machine operators",31,"Operators, fabricators and laborers"
+723,Metal platers,31,"Operators, fabricators and laborers"
+724,Heat treating equipment operators,31,"Operators, fabricators and laborers"
+727,Sawing machine operators and sawyers,31,"Operators, fabricators and laborers"
+729,"Nail and tacking, shaping and joining machine operators  (woodworking)",31,"Operators, fabricators and laborers"
+733,Other woodworking machine operators,31,"Operators, fabricators and laborers"
+734,"Printing machine operators, n.e.c.",31,"Operators, fabricators and laborers"
+736,Typesetters and compositors,31,"Operators, fabricators and laborers"
+738,Winding and twisting textile/apparel operatives,31,"Operators, fabricators and laborers"
+739,"Knitters, loopers, and toppers textile operatives",31,"Operators, fabricators and laborers"
+743,Textile cutting machine operators,31,"Operators, fabricators and laborers"
+744,Textile sewing machine operators,31,"Operators, fabricators and laborers"
+745,Shoemaking machine operators,31,"Operators, fabricators and laborers"
+747,Pressing machine operators (clothing),31,"Operators, fabricators and laborers"
+749,Misc textile machine operators,31,"Operators, fabricators and laborers"
+753,Cementing and gluing maching operators,31,"Operators, fabricators and laborers"
+754,"Packers, fillers, and wrappers",31,"Operators, fabricators and laborers"
+755,Extruding and forming machine operators,31,"Operators, fabricators and laborers"
+756,Mixing and blending machine operatives,31,"Operators, fabricators and laborers"
+757,"Separating, filtering, and clarifying machine operators",31,"Operators, fabricators and laborers"
+763,Roasting and baking machine operators (food),31,"Operators, fabricators and laborers"
+764,"Washing, cleaning, and pickling machine operators",31,"Operators, fabricators and laborers"
+765,Paper folding machine operators,31,"Operators, fabricators and laborers"
+766,"Furnace, kiln, and oven operators, apart from food",31,"Operators, fabricators and laborers"
+769,"Slicing, cutting, crushing and grinding machine operators",31,"Operators, fabricators and laborers"
+774,Photographic process workers,31,"Operators, fabricators and laborers"
+779,"Machine operators, n.e.c.",31,"Operators, fabricators and laborers"
+783,"Welders, solderers and metal cutters",31,"Operators, fabricators and laborers"
+785,Assemblers of electrical equipment,31,"Operators, fabricators and laborers"
+789,"Hand painting, coating, and decorating occupations",31,"Operators, fabricators and laborers"
+799,"Production checkers, graders and sorters in manufacturing",31,"Operators, fabricators and laborers"
+803,Supervisors of motor vehicle transportation,31,"Operators, fabricators and laborers"
+804,"Truck, delivery, and tractor drivers",31,"Operators, fabricators and laborers"
+808,Bus drivers,31,"Operators, fabricators and laborers"
+809,Taxi cab drivers and chauffeurs,31,"Operators, fabricators and laborers"
+813,Parking lot attendants,31,"Operators, fabricators and laborers"
+823,Railroad conductors and yardmasters,31,"Operators, fabricators and laborers"
+824,Locomotive operators (engineers and firemen),31,"Operators, fabricators and laborers"
+825,"Railroad brake, coupler, and switch operators",31,"Operators, fabricators and laborers"
+829,Ship crews and marine engineers,31,"Operators, fabricators and laborers"
+834,Water transport infrastructure tenders and crossing guards,31,"Operators, fabricators and laborers"
+844,Operating engineers of construction equipment,31,"Operators, fabricators and laborers"
+848,"Crane, derrick, winch, hoist and longhsore operators",31,"Operators, fabricators and laborers"
+853,Excavating and loading machine operators,31,"Operators, fabricators and laborers"
+859,Misc material moving occupations,31,"Operators, fabricators and laborers"
+865,"Helpers, constructions",31,"Operators, fabricators and laborers"
+866,"Helpers, surveyors",31,"Operators, fabricators and laborers"
+869,Construction laborers,31,"Operators, fabricators and laborers"
+873,Production helpers,31,"Operators, fabricators and laborers"
+875,Garbage and recyclable material collectors,31,"Operators, fabricators and laborers"
+878,Machine feeders and offbearers,31,"Operators, fabricators and laborers"
+885,Garage and service station related occupations,31,"Operators, fabricators and laborers"
+887,Vehicle washers and equipment cleaners,31,"Operators, fabricators and laborers"
+888,Packers and packagers by hand,31,"Operators, fabricators and laborers"
+889,"Laborers and freight, stock and material handlers, n.e.c.",31,"Operators, fabricators and laborers"
