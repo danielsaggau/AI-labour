@@ -79,3 +79,44 @@ tidy(mod, matrix="gamma") %>%
   ggplot(aes(x=document, y=gamma)) +
   geom_col(aes(fill=topic))
 
+
+#########################################################################################################
+
+doc.lengths <- rowSums(as.matrix(DocumentTermMatrix(ctweets)))
+dtm <- DocumentTermMatrix(ctweets[doc.lengths > 0])
+SEED = sample(1:1000000, 1)
+k = 3
+
+models <- list(
+  CTM       = CTM(dtm, k = k, control = list(seed = SEED, var = list(tol = 10^-4), em = list(tol = 10^-3))),
+  VEM       = LDA(dtm, k = k, control = list(seed = SEED)),
+  VEM_Fixed = LDA(dtm, k = k, control = list(estimate.alpha = FALSE, seed = SEED)),
+  Gibbs     = LDA(dtm, k = k, method = "Gibbs", control = list(seed = SEED, burnin = 1000,
+                                                               thin = 100,    iter = 1000))
+)
+
+lapply(models, terms, 10)
+
+
+#########################################################################################################
+library(ggplot2)
+library(dplyr)
+library(tidytext)
+
+gibbs <- models$Gibbs
+tidy <- tidy(gibbs, matrix ="beta")
+
+top_terms <- tidy %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+tidy %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+
